@@ -1,9 +1,11 @@
-import { Link, useFetcher } from "@remix-run/react";
+import { Link, useFetcher, useNavigation } from "@remix-run/react";
 import type { ActionData } from "~/types/auth";
 
 export default function Login() {
   const fetcher = useFetcher<ActionData>();
-  const isSubmitting = fetcher.state === "submitting";
+  const navigation = useNavigation();
+  const isSubmitting =
+    fetcher.state === "submitting" || navigation.state !== "idle";
 
   return (
     <div className="text-white">

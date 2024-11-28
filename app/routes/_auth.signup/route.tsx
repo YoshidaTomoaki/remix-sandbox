@@ -1,9 +1,11 @@
-import { Link, useFetcher } from "@remix-run/react";
+import { Link, useFetcher, useNavigation } from "@remix-run/react";
 import type { ActionData } from "~/types/auth";
 
 export default function Signup() {
   const fetcher = useFetcher<ActionData>();
-  const isSubmitting = fetcher.state === "submitting";
+  const navigation = useNavigation();
+  const isSubmitting =
+    fetcher.state === "submitting" || navigation.state !== "idle";
 
   return (
     <div className="text-white">
@@ -71,7 +73,7 @@ export default function Signup() {
           className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "送信中..." : "登録"}
+          {isSubmitting ? "送信中..." : "新規登録"}
         </button>
       </fetcher.Form>
       <p className="mt-6 text-center text-sm text-white/70">

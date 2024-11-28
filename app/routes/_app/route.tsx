@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useFetcher } from "@remix-run/react";
+import { NavLink, Outlet, useFetcher, useNavigation } from "@remix-run/react";
 import { type LoaderFunctionArgs } from "@remix-run/node";
 import { requireUserId } from "~/utils/auth.server";
 
@@ -9,8 +9,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return null;
 }
 
-export default function Index() {
+export default function AppLayout() {
   const logoutFetcher = useFetcher();
+  const navigation = useNavigation();
+  const isSubmitting =
+    logoutFetcher.state === "submitting" || navigation.state !== "idle";
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-blue-500 to-purple-600">
@@ -58,11 +61,10 @@ export default function Index() {
         >
           <button
             type="submit"
-            className="w-full text-left py-2 px-4 text-gray-300 hover:text-white hover:bg-gray-700 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50"
+            disabled={isSubmitting}
+            className="text-white/70 hover:text-white"
           >
-            {logoutFetcher.state === "submitting"
-              ? "ログアウト中..."
-              : "ログアウト"}
+            {isSubmitting ? "ログアウト中..." : "ログアウト"}
           </button>
         </logoutFetcher.Form>
       </nav>
