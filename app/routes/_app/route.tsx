@@ -1,4 +1,13 @@
 import { NavLink, Outlet, useFetcher } from "@remix-run/react";
+import { type LoaderFunctionArgs } from "@remix-run/node";
+import { requireUserId } from "~/utils/auth.server";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  // ログインしていない場合は、トップページ（/）へリダイレクト
+  await requireUserId(request);
+
+  return null;
+}
 
 export default function Index() {
   const logoutFetcher = useFetcher();
