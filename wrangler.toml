@@ -1,23 +1,37 @@
 #:schema node_modules/wrangler/config-schema.json
+# ref: https://developers.cloudflare.com/workers/wrangler/configuration/
 name = "remix-sandbox"
 compatibility_date = "2024-10-18"
 main = "./server.ts"
 assets = { directory = "./build/client" }
-
-# KV Namespaces
-kv_namespaces = [
-  { binding = "AUTH_STORE", id = "9840b920604d4fee80f95e19b4003e1a", preview_id = "29d0f941e9ea4e44ae495207b7e56a48" }
-]
-
-# Compatibility Flags
-
 compatibility_flags = ["nodejs_compat"]
 
-[vars]
-SESSION_SECRET = "your-session-secret"
-
-# Workers Logs
 [observability]
 enabled = true
 
+[[kv_namespaces]]
+binding = "AUTH_STORE"
+id = "9840b920604d4fee80f95e19b4003e1a"
+preview_id = "29d0f941e9ea4e44ae495207b7e56a48"
+
+[vars]
+ENVIRONMENT = "local"
+
+[env.dev]
+name = "remix-sandbox-dev"
+[env.dev.vars]
+ENVIRONMENT = "dev"
+[[env.dev.kv_namespaces]]
+binding = "AUTH_STORE"
+id = "9840b920604d4fee80f95e19b4003e1a"
+preview_id = "29d0f941e9ea4e44ae495207b7e56a48"
+
+[env.prod]
+name = "remix-sandbox-prod"
+[env.prod.vars]
+ENVIRONMENT = "prod"
+[[env.prod.kv_namespaces]]
+binding = "AUTH_STORE"
+id = "9840b920604d4fee80f95e19b4003e1a"
+preview_id = "29d0f941e9ea4e44ae495207b7e56a48"
 
