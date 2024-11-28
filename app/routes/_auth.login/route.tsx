@@ -1,28 +1,26 @@
-import { Form, useActionData, Link } from "@remix-run/react";
+import { Link, useFetcher } from "@remix-run/react";
 import type { ActionData } from "~/types/auth";
 
 export default function Login() {
-  const actionData = useActionData<ActionData>();
+  const fetcher = useFetcher<ActionData>();
+  const isSubmitting = fetcher.state === "submitting";
 
   return (
     <div className="text-white">
-      <h2 className="text-2xl font-bold text-center mb-2">ログイン</h2>
-      <p className="text-center text-gray-200 mb-6">
-        アカウントにログインしてください
-      </p>
+      <h2 className="text-2xl font-bold text-center mb-6">ログイン</h2>
 
-      {actionData?.error && (
+      {fetcher.data?.error && (
         <div
           className="bg-red-500/50 border border-red-700 text-white px-4 py-3 rounded mb-4"
           role="alert"
         >
-          <p>{actionData.error}</p>
+          <p>{fetcher.data.error}</p>
         </div>
       )}
 
-      <Form action="/api/login" method="post" className="space-y-4">
+      <fetcher.Form action="/api/login" method="post" className="space-y-6">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-1">
+          <label htmlFor="email" className="block text-sm text-white/70 mb-1">
             メールアドレス
           </label>
           <input
@@ -30,12 +28,16 @@ export default function Login() {
             type="email"
             name="email"
             required
-            className="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-md shadow-sm placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="your@email.com"
+            className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30"
+            placeholder="メールアドレス"
+            disabled={isSubmitting}
           />
         </div>
         <div>
-          <label htmlFor="password" className="block text-sm font-medium mb-1">
+          <label
+            htmlFor="password"
+            className="block text-sm text-white/70 mb-1"
+          >
             パスワード
           </label>
           <input
@@ -43,23 +45,22 @@ export default function Login() {
             type="password"
             name="password"
             required
-            className="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-md shadow-sm placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30"
             placeholder="••••••••"
+            disabled={isSubmitting}
           />
         </div>
         <button
           type="submit"
-          className="w-full bg-white text-blue-600 py-2 px-4 rounded-md hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-600 transition-colors"
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
+          disabled={isSubmitting}
         >
-          ログイン
+          {isSubmitting ? "送信中..." : "ログイン"}
         </button>
-      </Form>
-      <p className="mt-6 text-center text-sm text-gray-200">
-        アカウントをお持ちでない方は
-        <Link
-          to="/signup"
-          className="text-white hover:underline font-medium ml-1"
-        >
+      </fetcher.Form>
+      <p className="mt-6 text-center text-sm text-white/70">
+        アカウントをお持ちでない方は{" "}
+        <Link to="/signup" className="text-white hover:text-white/90">
           新規登録
         </Link>
       </p>

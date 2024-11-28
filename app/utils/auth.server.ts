@@ -29,7 +29,9 @@ export async function createUser(
   username: string
 ) {
   console.log("context", context);
-  const existingUser = await context.env.AUTH_STORE.get(`user:${email}`);
+  const existingUser = await context.cloudflare.env.AUTH_STORE.get(
+    `user:${email}`
+  );
   if (existingUser) {
     throw new Error("User already exists");
   }
@@ -44,8 +46,11 @@ export async function createUser(
     passwordHash,
   };
 
-  await context.env.AUTH_STORE.put(`user:${email}`, JSON.stringify(user));
-  await context.env.AUTH_STORE.put(`userId:${userId}`, email);
+  await context.cloudflare.env.AUTH_STORE.put(
+    `user:${email}`,
+    JSON.stringify(user)
+  );
+  await context.cloudflare.env.AUTH_STORE.put(`userId:${userId}`, email);
 
   return user;
 }
@@ -55,7 +60,7 @@ export async function verifyLogin(
   email: string,
   password: string
 ) {
-  const userJson = await context.env.AUTH_STORE.get(`user:${email}`);
+  const userJson = await context.cloudflare.env.AUTH_STORE.get(`user:${email}`);
   if (!userJson) return null;
 
   const user: User = JSON.parse(userJson);
@@ -80,10 +85,10 @@ export async function getUserById(
   context: AppLoadContext,
   userId: string
 ): Promise<User | null> {
-  const email = await context.env.AUTH_STORE.get(`userId:${userId}`);
+  const email = await context.cloudflare.env.AUTH_STORE.get(`userId:${userId}`);
   if (!email) return null;
 
-  const userJson = await context.env.AUTH_STORE.get(`user:${email}`);
+  const userJson = await context.cloudflare.env.AUTH_STORE.get(`user:${email}`);
   if (!userJson) return null;
 
   return JSON.parse(userJson);

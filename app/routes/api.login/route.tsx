@@ -25,5 +25,5 @@ export const action = async ({
     );
   }
 
-  return createUserSession(user.id, "/");
+  return createUserSession(user.id, "/home");
 };

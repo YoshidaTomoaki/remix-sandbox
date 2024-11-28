@@ -1,6 +1,8 @@
-import { NavLink, Outlet, Form } from "@remix-run/react";
+import { NavLink, Outlet, useFetcher } from "@remix-run/react";
 
 export default function Index() {
+  const logoutFetcher = useFetcher();
+
   return (
     <div className="flex h-screen bg-gradient-to-br from-blue-500 to-purple-600">
       {/* サイドメニュー */}
@@ -40,15 +42,14 @@ export default function Index() {
           </li>
         </ul>
 
-        {/* ログアウトボタン */}
-        <Form action="/api/logout" method="post">
+        <logoutFetcher.Form action="/api/logout" method="post">
           <button
             type="submit"
-            className="w-full mt-4 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            className="text-sm font-semibold leading-6 text-gray-900"
           >
             ログアウト
           </button>
-        </Form>
+        </logoutFetcher.Form>
       </nav>
 
       {/* メインコンテンツエリア */}

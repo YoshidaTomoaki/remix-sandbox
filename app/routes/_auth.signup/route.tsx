@@ -1,23 +1,24 @@
-import { Form, useActionData, Link } from "@remix-run/react";
+import { Link, useFetcher } from "@remix-run/react";
 import type { ActionData } from "~/types/auth";
 
 export default function Signup() {
-  const actionData = useActionData<ActionData>();
+  const fetcher = useFetcher<ActionData>();
+  const isSubmitting = fetcher.state === "submitting";
 
   return (
     <div className="text-white">
       <h2 className="text-2xl font-bold text-center mb-6">新規登録</h2>
 
-      {actionData?.error && (
+      {fetcher.data?.error && (
         <div
           className="bg-red-500/50 border border-red-700 text-white px-4 py-3 rounded mb-4"
           role="alert"
         >
-          <p>{actionData.error}</p>
+          <p>{fetcher.data.error}</p>
         </div>
       )}
 
-      <Form action="/api/signup" method="post" className="space-y-6">
+      <fetcher.Form action="/api/signup" method="post" className="space-y-6">
         <div>
           <label
             htmlFor="username"
@@ -45,6 +46,7 @@ export default function Signup() {
             required
             className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30"
             placeholder="メールアドレス"
+            disabled={isSubmitting}
           />
         </div>
         <div>
@@ -61,15 +63,17 @@ export default function Signup() {
             required
             className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30"
             placeholder="••••••••"
+            disabled={isSubmitting}
           />
         </div>
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
+          disabled={isSubmitting}
         >
-          登録
+          {isSubmitting ? "送信中..." : "登録"}
         </button>
-      </Form>
+      </fetcher.Form>
       <p className="mt-6 text-center text-sm text-white/70">
         すでにアカウントをお持ちの方は{" "}
         <Link to="/login" className="text-white hover:text-white/90">

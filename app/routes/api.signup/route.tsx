@@ -11,16 +11,12 @@ export const action = async ({
   const email = formData.get("email");
   const password = formData.get("password");
   const username = formData.get("username");
-  console.log("email", email);
-  console.log("password", password);
-  console.log("username", username);
 
   if (
     typeof email !== "string" ||
     typeof password !== "string" ||
     typeof username !== "string"
   ) {
-    console.log("フォームの入力内容が正しくありません");
     return json(
       { error: "フォームの入力内容が正しくありません" },
       { status: 400 }
@@ -29,9 +25,8 @@ export const action = async ({
 
   try {
     const user = await createUser(context, email, password, username);
-    return createUserSession(user.id, "/");
+    return createUserSession(user.id, "/home");
   } catch (error) {
-    console.log(error);
     if (error instanceof Error) {
       return json({ error: error.message }, { status: 400 });
     }
