@@ -9,18 +9,24 @@ type User = {
   passwordHash: string;
 };
 
-const SESSION_SECRET = "your-secret-key"; // 本番環境では環境変数から取得
+export function getSessionStorage(context: AppLoadContext) {
+  const SESSION_SECRET = context.cloudflare.env.SESSION_SECRET;
 
-const sessionStorage = createCookieSessionStorage({
-  cookie: {
-    name: "_session",
-    sameSite: "lax",
-    path: "/",
-    httpOnly: true,
-    secrets: [SESSION_SECRET],
-    secure: process.env.NODE_ENV === "production",
-  },
-});
+  if (!SESSION_SECRET) {
+    throw new Error("SESSION_SECRET is not defined in environment variables");
+  }
+
+  return createCookieSessionStorage({
+    cookie: {
+      name: "_session",
+      sameSite: "lax",
+      path: "/",
+      httpOnly: true,
+      secrets: [SESSION_SECRET],
+      secure: process.env.NODE_ENV === "production",
+    },
+  });
+}
 
 export async function createUser(
   context: AppLoadContext,
@@ -28,7 +34,6 @@ export async function createUser(
   password: string,
   username: string
 ) {
-  console.log("context", context);
   const existingUser = await context.cloudflare.env.AUTH_STORE.get(
     `user:${email}`
   );
@@ -71,12 +76,17 @@ export async function verifyLogin(
   return user;
 }
 
-export async function createUserSession(userId: string, redirectTo: string) {
-  const session = await sessionStorage.getSession();
+export async function createUserSession(
+  context: AppLoadContext,
+  userId: string,
+  redirectTo: string
+) {
+  const storage = getSessionStorage(context);
+  const session = await storage.getSession();
   session.set("userId", userId);
   return redirect(redirectTo, {
     headers: {
-      "Set-Cookie": await sessionStorage.commitSession(session),
+      "Set-Cookie": await storage.commitSession(session),
     },
   });
 }
@@ -94,33 +104,32 @@ export async function getUserById(
   return JSON.parse(userJson);
 }
 
-export async function getUserId(request: Request) {
-  const session = await sessionStorage.getSession(
-    request.headers.get("Cookie")
-  );
+export async function getUserId(context: AppLoadContext, request: Request) {
+  const storage = getSessionStorage(context);
+  const session = await storage.getSession(request.headers.get("Cookie"));
   const userId = session.get("userId");
   if (!userId || typeof userId !== "string") return null;
   return userId;
 }
 
 export async function requireUserId(
+  context: AppLoadContext,
   request: Request,
   redirectTo: string = "/login"
 ) {
-  const userId = await getUserId(request);
+  const userId = await getUserId(context, request);
   if (!userId) {
     throw redirect(redirectTo);
   }
   return userId;
 }
 
-export async function logout(request: Request) {
-  const session = await sessionStorage.getSession(
-    request.headers.get("Cookie")
-  );
+export async function logout(context: AppLoadContext, request: Request) {
+  const storage = getSessionStorage(context);
+  const session = await storage.getSession(request.headers.get("Cookie"));
   return redirect("/", {
     headers: {
-      "Set-Cookie": await sessionStorage.destroySession(session),
+      "Set-Cookie": await storage.destroySession(session),
     },
   });
 }
