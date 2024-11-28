@@ -1,4 +1,4 @@
-import { createCookieSessionStorage, redirect } from "@remix-run/node";
+import { createCookieSessionStorage, redirect } from "@remix-run/cloudflare";
 import type { AppLoadContext } from "@remix-run/cloudflare";
 import bcrypt from "bcryptjs";
 

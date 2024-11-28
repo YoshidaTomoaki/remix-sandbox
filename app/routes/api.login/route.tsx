@@ -1,11 +1,7 @@
-import { json, type ActionFunctionArgs } from "@remix-run/node";
-import type { AppLoadContext } from "@remix-run/cloudflare";
+import { json, type ActionFunctionArgs } from "@remix-run/cloudflare";
 import { verifyLogin, createUserSession } from "~/utils/auth.server";
 
-export const action = async ({
-  request,
-  context,
-}: ActionFunctionArgs & { context: AppLoadContext }) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -25,5 +21,5 @@ export const action = async ({
     );
   }
 
-  return createUserSession(user.id, "/home");
+  return createUserSession(context, user.id, "/home");
 };

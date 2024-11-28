@@ -1,10 +1,10 @@
 import { NavLink, Outlet, useFetcher, useNavigation } from "@remix-run/react";
-import { type LoaderFunctionArgs } from "@remix-run/node";
+import { type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { requireUserId } from "~/utils/auth.server";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request, context }: LoaderFunctionArgs) {
   // ログインしていない場合は、トップページ（/）へリダイレクト
-  await requireUserId(request);
+  await requireUserId(context, request);
 
   return null;
 }

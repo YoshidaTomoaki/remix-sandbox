@@ -1,12 +1,7 @@
-import { json, type ActionFunctionArgs } from "@remix-run/node";
-import type { AppLoadContext } from "@remix-run/cloudflare";
+import { json, type ActionFunctionArgs } from "@remix-run/cloudflare";
 import { createUser, createUserSession } from "~/utils/auth.server";
 
-export const action = async ({
-  request,
-  context,
-}: ActionFunctionArgs & { context: AppLoadContext }) => {
-  console.log("action", request.method);
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -25,7 +20,7 @@ export const action = async ({
 
   try {
     const user = await createUser(context, email, password, username);
-    return createUserSession(user.id, "/home");
+    return createUserSession(context, user.id, "/home");
   } catch (error) {
     if (error instanceof Error) {
       return json({ error: error.message }, { status: 400 });

@@ -1,10 +1,10 @@
-import { type ActionFunctionArgs } from "@remix-run/node";
+import { type ActionFunctionArgs } from "@remix-run/cloudflare";
 import { logout } from "~/utils/auth.server";
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   if (request.method !== "POST") {
     return new Response("Method not allowed", { status: 405 });
   }
 
-  return logout(request);
+  return logout(context, request);
 };

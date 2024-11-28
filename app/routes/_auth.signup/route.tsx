@@ -1,5 +1,15 @@
+import { json, redirect, type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { Link, useFetcher, useNavigation } from "@remix-run/react";
+import { getUserId } from "~/utils/auth.server";
 import type { ActionData } from "~/types/auth";
+
+export async function loader({ request, context }: LoaderFunctionArgs) {
+  const userId = await getUserId(context, request);
+  if (userId) {
+    return redirect("/home");
+  }
+  return json({});
+}
 
 export default function Signup() {
   const fetcher = useFetcher<ActionData>();
