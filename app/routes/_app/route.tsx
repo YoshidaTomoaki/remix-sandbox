@@ -42,12 +42,18 @@ export default function Index() {
           </li>
         </ul>
 
-        <logoutFetcher.Form action="/api/logout" method="post">
+        <logoutFetcher.Form
+          action="/api/logout"
+          method="post"
+          className="mt-auto"
+        >
           <button
             type="submit"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            className="w-full text-left py-2 px-4 text-gray-300 hover:text-white hover:bg-gray-700 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50"
           >
-            ログアウト
+            {logoutFetcher.state === "submitting"
+              ? "ログアウト中..."
+              : "ログアウト"}
           </button>
         </logoutFetcher.Form>
       </nav>
