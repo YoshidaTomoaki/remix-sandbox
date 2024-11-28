@@ -1,16 +1,81 @@
-import { Link } from "@remix-run/react";
+import { Form, useActionData, Link } from "@remix-run/react";
+import type { ActionData } from "~/types/auth";
 
-export default function Home() {
+export default function Signup() {
+  const actionData = useActionData<ActionData>();
+
   return (
-    <div className="flex flex-col items-center justify-center h-full text-white">
-      <h1 className="text-4xl font-bold mb-6">PokeAPI GraphQL Practice</h1>
-      <p className="text-xl mb-8">新規登録</p>
-      <Link
-        to="/search"
-        className="bg-yellow-400 text-blue-900 px-6 py-3 rounded-full font-semibold transition-all hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
-      >
-        新規登録機能だ！
-      </Link>
+    <div className="text-white">
+      <h2 className="text-2xl font-bold text-center mb-6">新規登録</h2>
+
+      {actionData?.error && (
+        <div
+          className="bg-red-500/50 border border-red-700 text-white px-4 py-3 rounded mb-4"
+          role="alert"
+        >
+          <p>{actionData.error}</p>
+        </div>
+      )}
+
+      <Form action="/api/signup" method="post" className="space-y-6">
+        <div>
+          <label
+            htmlFor="username"
+            className="block text-sm text-white/70 mb-1"
+          >
+            ユーザー名
+          </label>
+          <input
+            id="username"
+            type="text"
+            name="username"
+            required
+            className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30"
+            placeholder="ユーザー名"
+          />
+        </div>
+        <div>
+          <label htmlFor="email" className="block text-sm text-white/70 mb-1">
+            メールアドレス
+          </label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            required
+            className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30"
+            placeholder="メールアドレス"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-sm text-white/70 mb-1"
+          >
+            パスワード
+          </label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            required
+            className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30"
+            placeholder="••••••••"
+          />
+        </div>
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
+        >
+          登録
+        </button>
+      </Form>
+      <p className="mt-6 text-center text-sm text-white/70">
+        すでにアカウントをお持ちの方は{" "}
+        <Link to="/login" className="text-white hover:text-white/90">
+          ログイン
+        </Link>
+      </p>
     </div>
   );
 }

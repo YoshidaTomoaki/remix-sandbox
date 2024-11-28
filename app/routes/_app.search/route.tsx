@@ -1,6 +1,5 @@
-import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 import { Form, useActionData, useNavigation } from "@remix-run/react";
-import { json } from "@remix-run/cloudflare";
+import { json, type ActionFunctionArgs } from "@remix-run/node";
 import { useEffect, useState } from "react";
 import { graphQLClient } from "~/graphql/init";
 import {

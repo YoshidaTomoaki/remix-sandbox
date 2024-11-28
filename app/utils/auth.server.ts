@@ -1,0 +1,121 @@
+import { createCookieSessionStorage, redirect } from "@remix-run/node";
+import type { AppLoadContext } from "@remix-run/cloudflare";
+import bcrypt from "bcryptjs";
+
+type User = {
+  id: string;
+  email: string;
+  username: string;
+  passwordHash: string;
+};
+
+const SESSION_SECRET = "your-secret-key"; // 本番環境では環境変数から取得
+
+const sessionStorage = createCookieSessionStorage({
+  cookie: {
+    name: "_session",
+    sameSite: "lax",
+    path: "/",
+    httpOnly: true,
+    secrets: [SESSION_SECRET],
+    secure: process.env.NODE_ENV === "production",
+  },
+});
+
+export async function createUser(
+  context: AppLoadContext,
+  email: string,
+  password: string,
+  username: string
+) {
+  console.log("context", context);
+  const existingUser = await context.env.AUTH_STORE.get(`user:${email}`);
+  if (existingUser) {
+    throw new Error("User already exists");
+  }
+
+  const passwordHash = await bcrypt.hash(password, 10);
+  const userId = crypto.randomUUID();
+
+  const user: User = {
+    id: userId,
+    email,
+    username,
+    passwordHash,
+  };
+
+  await context.env.AUTH_STORE.put(`user:${email}`, JSON.stringify(user));
+  await context.env.AUTH_STORE.put(`userId:${userId}`, email);
+
+  return user;
+}
+
+export async function verifyLogin(
+  context: AppLoadContext,
+  email: string,
+  password: string
+) {
+  const userJson = await context.env.AUTH_STORE.get(`user:${email}`);
+  if (!userJson) return null;
+
+  const user: User = JSON.parse(userJson);
+  const isValid = await bcrypt.compare(password, user.passwordHash);
+
+  if (!isValid) return null;
+
+  return user;
+}
+
+export async function createUserSession(userId: string, redirectTo: string) {
+  const session = await sessionStorage.getSession();
+  session.set("userId", userId);
+  return redirect(redirectTo, {
+    headers: {
+      "Set-Cookie": await sessionStorage.commitSession(session),
+    },
+  });
+}
+
+export async function getUserById(
+  context: AppLoadContext,
+  userId: string
+): Promise<User | null> {
+  const email = await context.env.AUTH_STORE.get(`userId:${userId}`);
+  if (!email) return null;
+
+  const userJson = await context.env.AUTH_STORE.get(`user:${email}`);
+  if (!userJson) return null;
+
+  return JSON.parse(userJson);
+}
+
+export async function getUserId(request: Request) {
+  const session = await sessionStorage.getSession(
+    request.headers.get("Cookie")
+  );
+  const userId = session.get("userId");
+  if (!userId || typeof userId !== "string") return null;
+  return userId;
+}
+
+export async function requireUserId(
+  request: Request,
+  redirectTo: string = "/login"
+) {
+  const userId = await getUserId(request);
+  if (!userId) {
+    throw redirect(redirectTo);
+  }
+  return userId;
+}
+
+export async function logout(request: Request) {
+  const session = await sessionStorage.getSession(
+    request.headers.get("Cookie")
+  );
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await sessionStorage.destroySession(session),
+    },
+  });
+}

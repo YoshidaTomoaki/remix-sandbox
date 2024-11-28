@@ -13,6 +13,7 @@ export type PokemonDetail = {
   name: string;
   height: number;
   weight: number;
+  pokemon_species_id: number;
 };
 
 /**

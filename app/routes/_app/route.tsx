@@ -1,12 +1,14 @@
-import { NavLink, Outlet } from "@remix-run/react";
+import { NavLink, Outlet, Form } from "@remix-run/react";
 
 export default function Index() {
   return (
     <div className="flex h-screen bg-gradient-to-br from-blue-500 to-purple-600">
       {/* サイドメニュー */}
-      <nav className="w-64 bg-gray-800 text-white p-6">
+      <nav className="w-64 bg-gray-800 text-white p-6 flex flex-col">
         <h1 className="text-2xl font-bold mb-6">PokeAPI GraphQL Practice</h1>
-        <ul className="space-y-2">
+
+        {/* メニューリスト */}
+        <ul className="space-y-2 flex-1">
           <li>
             <NavLink
               to="/home"
@@ -36,8 +38,17 @@ export default function Index() {
               ポケモン検索
             </NavLink>
           </li>
-          {/* 他のメニュー項目をここに追加 */}
         </ul>
+
+        {/* ログアウトボタン */}
+        <Form action="/api/logout" method="post">
+          <button
+            type="submit"
+            className="w-full mt-4 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+          >
+            ログアウト
+          </button>
+        </Form>
       </nav>
 
       {/* メインコンテンツエリア */}

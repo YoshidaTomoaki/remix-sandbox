@@ -1,11 +1,11 @@
 import { Outlet } from "@remix-run/react";
 
-export default function Index() {
+export default function AuthLayout() {
   return (
-    <div className="flex h-screen bg-gradient-to-br from-blue-500 to-purple-600">
-      <main className="flex-1 p-8 overflow-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-indigo-900 flex items-center justify-center p-4">
+      <div className="bg-white/10 backdrop-blur-lg rounded-lg shadow-2xl p-8 w-full max-w-md">
         <Outlet />
-      </main>
+      </div>
     </div>
   );
 }
