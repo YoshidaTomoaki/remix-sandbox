@@ -20,7 +20,9 @@ export default function Login() {
 
   return (
     <div className="text-white">
-      <h2 className="text-2xl font-bold text-center mb-6">ログイン</h2>
+      <h2 id="top" className="text-2xl font-bold text-center mb-6">
+        ログイン
+      </h2>
 
       {fetcher.data?.error && (
         <div
@@ -75,6 +77,11 @@ export default function Login() {
         アカウントをお持ちでない方は{" "}
         <Link to="/signup" className="text-white hover:text-white/90">
           新規登録
+        </Link>
+      </p>
+      <p className="mt-4 text-center text-sm">
+        <Link to="/" className="text-white hover:text-white/90">
+          トップへ戻る
         </Link>
       </p>
     </div>
