@@ -9,6 +9,8 @@ compatibility_flags = ["nodejs_compat"]
 [observability]
 enabled = true
 
+# bindingのidは秘匿情報じゃないので問題無し
+# ref: https://github.com/cloudflare/workers-sdk/discussions/7115?utm_source=chatgpt.com
 [[kv_namespaces]]
 binding = "AUTH_STORE"
 id = "9840b920604d4fee80f95e19b4003e1a"

@@ -1,43 +1,43 @@
-# Welcome to Remix + Cloudflare Workers!
+# Remix + Cloudflare Workers へようこそ！
 
-- 📖 [Remix docs](https://remix.run/docs)
-- 📖 [Remix Cloudflare docs](https://remix.run/guides/vite#cloudflare)
+- 📖 [Remix ドキュメント](https://remix.run/docs)
+- 📖 [Remix Cloudflare ドキュメント](https://remix.run/guides/vite#cloudflare)
 
-## Development
+## 開発
 
-Run the dev server:
+開発サーバーの起動:
 
 ```sh
 npm run dev
 ```
 
-To run Wrangler:
+Wrangler の実行:
 
 ```sh
 npm run build
 npm start
 ```
 
-## Typegen
+## 型生成
 
-Generate types for your Cloudflare bindings in `wrangler.toml`:
+`wrangler.toml`に定義されている Cloudflare バインディングの型を生成:
 
 ```sh
 npm run typegen
 ```
 
-You will need to rerun typegen whenever you make changes to `wrangler.toml`.
+`wrangler.toml`を変更した場合は、typegen を再実行する必要があります。
 
-## Deployment
+## デプロイ
 
-If you don't already have an account, then [create a cloudflare account here](https://dash.cloudflare.com/sign-up) and after verifying your email address with Cloudflare, go to your dashboard and set up your free custom Cloudflare Workers subdomain.
+アカウントをお持ちでない場合は、[こちらから Cloudflare アカウントを作成](https://dash.cloudflare.com/sign-up)し、メールアドレスを確認した後、ダッシュボードで無料のカスタム Cloudflare Workers サブドメインを設定してください。
 
-Once that's done, you should be able to deploy your app:
+設定が完了したら、以下のコマンドでアプリをデプロイできます：
 
 ```sh
 npm run deploy
 ```
 
-## Styling
+## スタイリング
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+このテンプレートには、シンプルなデフォルトの開発体験のために[Tailwind CSS](https://tailwindcss.com/)が既に設定されています。お好みの CSS フレームワークを使用することもできます。詳しくは[Vite の CSS に関するドキュメント](https://vitejs.dev/guide/features.html#css)をご覧ください。
