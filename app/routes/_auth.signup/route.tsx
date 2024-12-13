@@ -92,6 +92,11 @@ export default function Signup() {
           ログイン
         </Link>
       </p>
+      <p className="mt-4 text-center text-sm">
+        <Link to="/" className="text-white hover:text-white/90">
+          トップへ戻る
+        </Link>
+      </p>
     </div>
   );
 }
