@@ -13,6 +13,12 @@ export default function Home() {
       >
         ポケモン検索を始める
       </Link>
+      <Link
+        to="/sample"
+        className="bg-yellow-400 text-blue-900 px-6 py-3 rounded-full font-semibold transition-all hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
+      >
+        エラーを出す
+      </Link>
     </div>
   );
 }
