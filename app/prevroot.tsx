@@ -4,10 +4,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteError,
 } from "@remix-run/react";
-import { withSentry } from "@sentry/remix";
-
 import type { LinksFunction } from "@remix-run/node";
+
+import "./tailwind.css";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -40,8 +41,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-function App() {
+export default function App() {
   return <Outlet />;
 }
 
-export default withSentry(App);
+export function ErrorBoundary() {
+  const e = useRouteError();
+  console.log("ErrorBoundary: ", e);
+  return <div>Error</div>;
+}

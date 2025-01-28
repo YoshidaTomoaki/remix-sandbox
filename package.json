@@ -15,9 +15,10 @@
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
-    "@remix-run/cloudflare": "^2.14.0",
-    "@remix-run/react": "^2.14.0",
-    "@remix-run/server-runtime": "^2.14.0",
+    "@remix-run/cloudflare": "^2.15.2",
+    "@remix-run/react": "^2.15.2",
+    "@remix-run/server-runtime": "^2.15.2",
+    "@sentry/remix": "^8.51.0",
     "bcryptjs": "^2.4.3",
     "graphql-request": "^7.1.2",
     "isbot": "^4.1.0",
