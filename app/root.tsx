@@ -7,6 +7,8 @@ import {
 } from "@remix-run/react";
 import { withSentry } from "@sentry/remix";
 
+import "./tailwind.css";
+
 import type { LinksFunction } from "@remix-run/node";
 
 export const links: LinksFunction = () => [
